@@ -4,9 +4,10 @@
         <div class="product-container">
             {{#each products}}
             <div class="product">
-                <h2>Descripcion {{thisdescription}} </h2>
+                <h2>Descripcion {{this.description}} </h2>
                 <p>Precio ${{this.price}} </p>
-                <a href="/api/products/{{this._id}} ">Ver Detalle </a>
+                <button>Agregar al carrito</button>
+                <a href="/api/product/{{this._id}} ">Ver Detalle </a>
             </div>
             {{/each}}
         </div>

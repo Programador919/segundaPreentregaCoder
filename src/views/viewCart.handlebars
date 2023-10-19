@@ -7,18 +7,25 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="Product-details"></div>
-    <p>Carrito ID: {{Carts._id}} </p>
-    <h2>Productos en el Carrito</h2>
-    <ul>
-        {{#each carts.products}}
-            <li>
-                <p>Producto ID : {{this.productId._id}} </p>
-                <p>Descripcion : {{this.productId.description}} </p>
-                <p>Precio : $ {{this.productId.price}} </p>
-                <p>Cantidad : {{this.quantity}} </p>
-            </li>
-        {{/each}}
-    </ul>
+    <div class="Product-details">
+        <p>Carrito ID: {{carts._id}} </p>
+        <h2>Productos en el Carrito</h2>
+        <ul>
+            {{#each carts.products}}
+                <li>
+                    <p>Producto ID : {{this.productId._id}} </p>
+                    <p>Descripcion : {{this.productId.description}} </p>
+                    <p>Precio : $ {{this.productId.price}} </p>
+                    <p>Cantidad : {{this.quantity}} </p>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <!-- Agrega cualquier otro contenido que desees mostrar en la página -->
+
+    <footer>
+        <!-- Agrega contenido del pie de página si es necesario -->
+    </footer>
 </body>
 </html>
