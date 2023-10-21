@@ -2,23 +2,3 @@ Puerto 8080
 
 se inicializa con el comado : npm start
 
-lo trabaje con Thunder cliente
-
-ver los elemntos de api/cart con get
-ejemplo  http://localhost:8080/api/cart
-
-ver un elemento de api/card con un cid  y get
-ejemplo http://localhost:8080/api/cart/4mrUOE6Ji9lpkUQH8au_f
-
-tambien estan los metodos de peticion post - put y delete en cart y products
-
-ver los elemntos de api/products con get
-ejemplo   http://localhost:8080/api/products
-
-ver un elemento de api/products con un pid  y get
-ejemplo    http://localhost:8080/api/products/KjrlLvZVnhpysxdEmrIfV
-
-
-forma utilizada para agregar un producto en un carrito 
-ejemplo  http://localhost:8080/api/cart/n0tvXMhNoNt6nxh4o8aPn/products/bNwKFhmyRwR-vlznE5JCD
-
