@@ -10,6 +10,7 @@ import productRouter from "./router/product.routes.js"
 import ProductManager from "./controllers/ProductManager.js"
 import CartManager from "./controllers/CartManager.js";
 import { createServer } from 'http';
+import { productsModel } from './models/products.model.js';
 
 const app = express();
 //const PORT = 8080
@@ -28,7 +29,8 @@ http.listen(PORT, ()=>{
     console.log(`Servidor Express Puerto ${PORT}`);
 });
 //-----------------mongoose----------------
-mongoose.connect("mongodb+srv://luisalbertovalencia1966:2ogZdmSl9jWGJBAV@proyectocoder.sqvx5rc.mongodb.net/?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://luisalbertovalencia1966:2ogZdmSl9jWGJBAV@proyectocoder.sqvx5rc.mongodb.net/?retryWrites=true&w=majority"
+)
 .then(()=> {
     console.log("Conectado a la base de datos ")
 })
@@ -73,11 +75,11 @@ app.set("views", path.join(__dirname, "views"));
 
 //css statics
 app.use("/", express.static(__dirname + "/public/css"))
-
+app.use("/src/public", express.static("/public"));
 //ruta 
-app.get("/", (req, res)=> {
-    res.render("viewDetails", {productId});
-})
+// app.get("/", (req, res)=> {
+//     res.render("viewDetails", {productId});
+// })
 
 //rederizado de productos
 app.get("/product", async (req, res) => {
@@ -98,17 +100,43 @@ app.get("/product", async (req, res) => {
 
 //render productos en carrito
 //app.get("/carts/:pid", async (req, res) => {
-app.get("/carts", async (req, res) => {
+app.get("/carts/652eeda03796fafc865d1b18", async (req, res) => {
     try {
-        let id = req.params.cid
+        let id = req.params.id
         let allCarts = await cart.getCartWithProducts(id);
         res.render("viewCart", {
-            title : "vista Cart",
-            carts : allCarts,
-            
+            title : "vista del carrito",
+            carts : allCarts
     })
+    
     } catch (error) {
         console.error("Error al obtener el carrito ", error)
         res.status(500).send("Error interno del servidor")
+    }
+})
+
+
+const ObjectId = mongoose.Types.ObjectId;
+
+app.get("/detalle/:id", async (req, res) => {
+    try {
+        const productId = req.params.id
+        //const selectedProduct = await product.getProductById(productId);
+        if(!ObjectId.isValid(productId)) {
+            return res.status(400).json({error: 'ID invalido'})
+        }
+        const selectedProduct = await product.getProductById(productId);
+        if(!selectedProduct) {
+            return res.status(404).send('Producto no encontrado')
+        }
+        
+        res.render('viewDetails', {
+            title: "Vista de Producto" ,
+            product: selectedProduct
+            
+        })
+    } catch (error) {
+        console.error("Error al obtener el producto", error)
+        res.status(500).send('Error del servidor')
     }
 })
