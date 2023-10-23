@@ -10,7 +10,7 @@ import productRouter from "./router/product.routes.js"
 import ProductManager from "./controllers/ProductManager.js"
 import CartManager from "./controllers/CartManager.js";
 import { createServer } from 'http';
-import { productsModel } from './models/products.model.js';
+
 
 const app = express();
 //const PORT = 8080
@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 8080;
 
 const product = new ProductManager()
 const cart = new CartManager();
+const ObjectId = mongoose.Types.ObjectId;
 
 //Middleware para parsear json y datos de formulario
 app.use(express.json());
@@ -42,23 +43,6 @@ mongoose.connect("mongodb+srv://luisalbertovalencia1966:2ogZdmSl9jWGJBAV@proyect
 app.use("/api/product", productRouter)
 app.use("/api/carts", CartRouter)
 
-//handlebarts ----
-
-// app.engine("handlebars", engine())'
-// app.set('view engine', "handlebars")
-// app.set("views", path.resolve(__dirname + "/views"))
-
-//handlebarts de youtube
-// app.set("port", process.env.PORT || 8080);
-// app.set("views", path.join(__dirname + "/views"));
-// app.engine("handlebarts", ExpressHandlebars({
-//     defaultlayouts: "main",
-//     layoutsDir: path.join(app.get("views"), "/layouts"),
-//     partialsDir: path.join(app.get("views"), "partials"),
-//     //extended: ".hbs"
-// }));
-// app.set("view engine", "handlebarts");
-
 
 //handlebarts de ayuda
 const hbs = exphbs.create({
@@ -77,9 +61,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/", express.static(__dirname + "/public/css"))
 app.use("/src/public", express.static("/public"));
 //ruta 
-// app.get("/", (req, res)=> {
-//     res.render("viewDetails", {productId});
-// })
+
 
 //rederizado de productos
 app.get("/product", async (req, res) => {
@@ -98,17 +80,28 @@ app.get("/product", async (req, res) => {
 
 
 
-//render productos en carrito
-//app.get("/carts/:pid", async (req, res) => {
-app.get("/carts/652eeda03796fafc865d1b18", async (req, res) => {
+                 //render productos en carrito
+app.get("/carts/:id", async (req, res) => {
     try {
-        let id = req.params.id
+        const productId = req.params.id
+        //const selectedProduct = await product.getProductById(productId);
+        if(!ObjectId.isValid(productId)) {
+            return res.status(400).json({error: 'ID invalido'})
+        }
+        const selectedProduct = await product.getProductById(productId);
+        if(!selectedProduct) {
+            return res.status(404).send('Producto no encontrado')
+        }
+
+        const id = req.params.id
         let allCarts = await cart.getCartWithProducts(id);
+        
         res.render("viewCart", {
+            carts: id,
             title : "vista del carrito",
             carts : allCarts
+        
     })
-    
     } catch (error) {
         console.error("Error al obtener el carrito ", error)
         res.status(500).send("Error interno del servidor")
@@ -116,12 +109,12 @@ app.get("/carts/652eeda03796fafc865d1b18", async (req, res) => {
 })
 
 
-const ObjectId = mongoose.Types.ObjectId;
+
 
 app.get("/detalle/:id", async (req, res) => {
     try {
         const productId = req.params.id
-        //const selectedProduct = await product.getProductById(productId);
+        
         if(!ObjectId.isValid(productId)) {
             return res.status(400).json({error: 'ID invalido'})
         }
@@ -140,3 +133,4 @@ app.get("/detalle/:id", async (req, res) => {
         res.status(500).send('Error del servidor')
     }
 })
+

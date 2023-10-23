@@ -1,15 +1,15 @@
 <div class="details">
-    <p>Carrito ID: {{cart._id}} </p>
+    <p>Carrito ID: {{carts._id}} </p>
     <h2>Productos en el Carrito</h2>
     <ul>
-        {{#each carts.product}} <!--carts.products-->
+        {{#each carts.products}} <!--carts.products-->
             <li>
-                <p>Producto ID : {{_id}} </p>
-                <p>Descripcion : {{description}} </p>
-                <p>Precio : $ {{price}} </p>
-                <p>Cantidad : {{quantity}} </p>
+                <p>Producto ID : {{this._id}} </p>
+                <p>Descripcion : {{this.description}} </p>
+                <p>Precio : $ {{this.price}} </p>
+                <p>Cantidad : {{this.quantity}} </p>
             </li>
         {{/each}}
+        <script src="/src/public/js/button.js"></script>
     </ul>
 </div>
-
